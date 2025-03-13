@@ -100,7 +100,6 @@ st.sidebar.markdown(
 st.sidebar.markdown("### 📦 Library Versions")
 st.sidebar.markdown(f"🔹 **google-generativeai**: {genai.__version__}")
 st.sidebar.markdown(f"🔹 **streamlit**: {st.__version__}")
-st.sidebar.markdown(f"🔹 **langchain-google-genai**: {ChatGoogleGenerativeAI.__module__}")
 
 # 💡 Tips for best results
 st.sidebar.title("💡 Tips for Best Results")
