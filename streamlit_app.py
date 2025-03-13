@@ -97,13 +97,13 @@ st.markdown(
         <p style="font-size:18px;">Made with ❤️ by <b>Anubhav Verma</b></p>
         <p>Connect with me:</p>
         <a href="https://www.instagram.com/anubhvv" target="_blank" style="margin-right: 10px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="30">
+            <img src="https://drive.google.com/file/d/1xY7kt2TBGm7yZOqU5pPBv4_LCjITqSY4/view?usp=sharing" width="30">
         </a>
         <a href="https://www.linkedin.com/in/anubhvv" target="_blank" style="margin-right: 10px;">
-            <img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" width="30">
+            <img src="https://drive.google.com/file/d/1Yr_lLF5ni3cLmRd7iGGBEYrIZvImYxAt/view?usp=sharing" width="30">
         </a>
         <a href="mailto:anubhav.verma360@gmail.com" target="_blank">
-            <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="30">
+            <img src="https://drive.google.com/file/d/1hiRwNG3TUAkGJlop2CTZRTKoYf9r-FZG/view?usp=sharing" width="30">
         </a>
     </div>
     """, 
