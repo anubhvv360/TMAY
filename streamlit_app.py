@@ -127,8 +127,7 @@ st.markdown("""---""")
 st.markdown(
     """
     <div style="background: linear-gradient(to right, blue, purple); padding: 15px; border-radius: 10px; text-align: center; margin-top: 20px; color: white;">
-        Made with ❤️ by Anubhav Verma<br>
-        Please reach out to anubhav.verma360@gmail.com if you encounter any issues.
+        Made with ❤️ by Anubhav Verma
     </div>
     """, 
     unsafe_allow_html=True
