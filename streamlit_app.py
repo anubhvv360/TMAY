@@ -86,10 +86,45 @@ if st.button("🚀 Generate Introduction"):
             file_name="my_introduction.txt",
             mime="text/plain"
         )
-# Footer for Credits (displayed at the end)
-import streamlit as st
 
-# Footer for Credits (displayed at the end)
+# Sidebar Configuration
+st.sidebar.title("ℹ️ About This App")
+st.sidebar.markdown(
+    """
+    This tool generates a **unique, engaging, and personalized** "Tell Me About Yourself" introduction.
+    Fill in the details and let AI craft a compelling response! 🚀
+    """
+)
+
+# 📌 Display library versions
+st.sidebar.markdown("### 📦 Library Versions")
+st.sidebar.markdown(f"🔹 **google-generativeai**: {genai.__version__}")
+st.sidebar.markdown(f"🔹 **streamlit**: {st.__version__}")
+st.sidebar.markdown(f"🔹 **langchain**: {langchain.__version__}")
+st.sidebar.markdown(f"🔹 **langchain-google-genai**: {ChatGoogleGenerativeAI.__module__}")
+
+# 💡 Tips for best results
+st.sidebar.title("💡 Tips for Best Results")
+st.sidebar.markdown(
+    """
+    - Use a **fun alias or nickname** to make it more interesting.
+    - Add a **quirky fun fact** to make your introduction stand out.
+    - Choose an appropriate **tone** (Professional, Casual, Friendly, etc.).
+    - The AI crafts a **new response every time** – even with the same inputs!
+    """
+)
+
+# 📧 Contact / Credits
+st.sidebar.markdown("---")
+st.sidebar.markdown(
+    """
+    **🔗 Created by Anubhav**  
+    Have feedback? [Reach out!](mailto:anubhav.verma360@gmail.com) 😊  
+    """,
+    unsafe_allow_html=True
+)
+
+
 # Footer for Credits (displayed at the end)
 st.markdown("""---""")
 st.markdown(
