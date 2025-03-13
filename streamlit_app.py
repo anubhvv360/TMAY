@@ -1,74 +1,111 @@
 import streamlit as st
 import os
+import google.generativeai as genai
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 
-# Function to create the detailed prompt using the provided inputs
-def generate_prompt(name, country, job_role, hobbies, fun_fact, favorite, tone):
-    prompt = (
-        f"Using the following details, draft a 'Tell Me About Yourself' introduction:\n\n"
-        f"Name (Fun Alias): {name}\n"
-        f"Country of Origin: {country}\n"
-        f"Job Role (What's your hustle?): {job_role}\n"
-        f"Hobbies/Interests: {hobbies}\n"
-        f"Fun Fact/Unique Detail: {fun_fact}\n"
-        f"Favorite Emoji or Catchphrase: {favorite}\n"
-        f"Tone: {tone}\n\n"
-        f"Please generate an engaging and personalized self-introduction that reflects a {tone.lower()} tone. "
-        f"Be sure to incorporate the fun alias, background, professional hustle, personal interests, and that quirky detail. "
-        f"Finish with a creative touch using the favorite emoji or catchphrase."
-    )
-    return prompt
-
-# Streamlit App Layout
+# Set page config
 st.set_page_config(page_title="Tell Me About Yourself Generator", layout="centered")
-st.title("Tell Me About Yourself Generator")
-st.markdown("Fill in the details below and click **Generate Introduction** to draft your personalized response.")
+st.title("🌟 Tell Me About Yourself Generator")
+st.markdown("Fill in the details below and click **Generate Introduction** to create a unique and engaging response!")
+
+# Check for API Key
+api_key = os.environ.get("GOOGLE_API_KEY")
+if not api_key:
+    st.error("Google API Key not found in environment variables. Please set GOOGLE_API_KEY.")
+    st.stop()
+
+# Configure Gemini AI
+genai.configure(api_key=api_key)
 
 # User Inputs
-name = st.text_input("Name (Fun Alias or Nickname)", placeholder="e.g., Maverick")
-country = st.text_input("Country of Origin", placeholder="e.g., USA")
-job_role = st.text_input("Job Role (What’s your hustle?)", placeholder="e.g., Software Engineer")
-hobbies = st.text_input("Hobbies/Interests", placeholder="e.g., Gaming, Cooking, Painting")
-fun_fact = st.text_input("Fun Fact or Unique Detail", placeholder="e.g., I once backpacked across Europe")
-favorite = st.text_input("Favorite Emoji or Catchphrase", placeholder="e.g., 🚀 or 'Let's rock!'")
+name = st.text_input("🌟 Fun Alias or Nickname", placeholder="e.g., Maverick")
+country = st.text_input("🌍 Country of Origin", placeholder="e.g., USA")
+job_role = st.text_input("💼 What’s your hustle?", placeholder="e.g., Software Engineer")
+hobbies = st.text_input("🎨 Hobbies/Interests", placeholder="e.g., Gaming, Cooking, Painting")
+fun_fact = st.text_input("🤩 Fun Fact or Unique Detail", placeholder="e.g., I once backpacked across Europe")
+favorite = st.text_input("🔥 Favorite Emoji or Catchphrase", placeholder="e.g., 🚀 or 'Let's rock!'")
 
-# Tone dropdown with additional options
-tone_options = [
-    "Professional", 
-    "Casual", 
-    "Friendly", 
-    "Inspirational", 
-    "Humorous", 
-    "Confident", 
-    "Charming",
-    "Energetic",
-    "Laid-back"
-]
-tone = st.selectbox("Tone", tone_options)
+# Tone options
+tone_options = ["Professional", "Casual", "Friendly", "Inspirational", "Humorous", "Confident", "Charming", "Energetic", "Laid-back"]
+tone = st.selectbox("🎭 Tone", tone_options)
 
-# Generate button and output section
-if st.button("Generate Introduction"):
-    # Build the prompt
-    prompt = generate_prompt(name, country, job_role, hobbies, fun_fact, favorite, tone)
-    
-    st.subheader("Detailed Prompt")
-    st.code(prompt, language="text")
-    
-    # Retrieve the API key from the environment variable
-    api_key = os.environ.get("GOOGLE_API_KEY")
-    if not api_key:
-        st.error("Google API Key not found in environment variables. Please set GOOGLE_API_KEY.")
+# LangChain Prompt Template
+intro_prompt = """
+You are a creative writer. Using the details below, generate a **unique and engaging "Tell Me About Yourself" introduction** in a {tone} tone:
+
+- **Name (Fun Alias):** {name}
+- **Country of Origin:** {country}
+- **Job Role:** {job_role}
+- **Hobbies/Interests:** {hobbies}
+- **Fun Fact:** {fun_fact}
+- **Favorite Emoji or Catchphrase:** {favorite}
+
+Make it **interesting, natural, and conversational**. Ensure it reflects the selected tone and includes a fun, personal touch. 
+"""
+
+prompt_template = PromptTemplate(
+    input_variables=["name", "country", "job_role", "hobbies", "fun_fact", "favorite", "tone"],
+    template=intro_prompt
+)
+
+# LangChain LLM
+llm_chain = LLMChain(
+    prompt=prompt_template,
+    llm=ChatGoogleGenerativeAI(
+        model="gemini-1.5-pro-latest",
+        temperature=0.8,
+        max_tokens=500
+    )
+)
+
+# Generate Introduction
+if st.button("🚀 Generate Introduction"):
+    if not name or not country or not job_role or not hobbies or not fun_fact or not favorite:
+        st.error("Please fill in all fields before generating your introduction.")
     else:
-        # Here, you would typically integrate with LangChain and your Gemini LLM
-        # For example, using a chain that takes in the prompt and returns a generated response.
-        # Since the actual integration depends on your setup, we'll simulate a response.
-        
-        # Simulated response (replace this with your Gemini LLM integration code)
-        simulated_response = (
-            f"Hi there, I'm {name}! Born in {country}, I thrive as a {job_role}. "
-            f"When I'm not on the clock, you can find me indulging in my love for {hobbies}. "
-            f"One quirky fact about me is that {fun_fact}. And as a finishing touch, "
-            f"my personal mantra is '{favorite}'—always keeping it {tone.lower()} and genuine."
+        with st.spinner("Generating your introduction..."):
+            response = llm_chain.run({
+                "name": name,
+                "country": country,
+                "job_role": job_role,
+                "hobbies": hobbies,
+                "fun_fact": fun_fact,
+                "favorite": favorite,
+                "tone": tone
+            })
+
+        st.subheader("🎤 Your Personalized Introduction:")
+        st.write(response)
+
+        # Download Option
+        st.download_button(
+            label="📥 Download Introduction",
+            data=response,
+            file_name="my_introduction.txt",
+            mime="text/plain"
         )
-        
-        st.subheader("Generated Introduction")
-        st.write(simulated_response)
+# Footer for Credits (displayed at the end)
+import streamlit as st
+
+# Footer for Credits (displayed at the end)
+st.markdown("""---""")
+st.markdown(
+    """
+    <div style="background: linear-gradient(to right, blue, purple); padding: 15px; border-radius: 10px; text-align: center; margin-top: 20px; color: white;">
+        <p style="font-size:18px;">Made with ❤️ by <b>Anubhav Verma</b></p>
+        <p>Connect with me:</p>
+        <a href="https://www.instagram.com/anubhvv" target="_blank" style="margin-right: 10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="30">
+        </a>
+        <a href="https://www.linkedin.com/in/anubhvv" target="_blank" style="margin-right: 10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" width="30">
+        </a>
+        <a href="mailto:anubhav.verma360@gmail.com" target="_blank">
+            <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" width="30">
+        </a>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
