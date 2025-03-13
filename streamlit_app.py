@@ -6,7 +6,7 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 
 # Set page config
-st.set_page_config(page_title="Tell Me About Yourself Generator", layout="centered")
+st.set_page_config(page_title="Tell Me About Yourself Generator", page_icon="🌟", layout="wide")
 st.title("🌟 Tell Me About Yourself Generator")
 st.markdown("Fill in the details below and click **Generate Introduction** to create a unique and engaging response!")
 
@@ -123,7 +123,6 @@ st.sidebar.markdown(
     """,
     unsafe_allow_html=True
 )
-
 
 # Footer for Credits (displayed at the end)
 st.markdown("""---""")
