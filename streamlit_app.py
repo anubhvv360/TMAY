@@ -54,7 +54,7 @@ prompt_template = PromptTemplate(
 llm_chain = LLMChain(
     prompt=prompt_template,
     llm=ChatGoogleGenerativeAI(
-        model="gemini-1.5-pro-latest",
+        model="gemini-2.0-flash",
         temperature=0.8,
         max_tokens=500
     )
